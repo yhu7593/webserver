@@ -2,16 +2,45 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>awsl</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>视频播放 - TinyWebServer</title>
+        <link rel="stylesheet" href="./css/style.css">
+        <script src="./js/main.js" defer></script>
     </head>
-    <body><br/>
-<br/>
-<div align="center"><font size="5"> <strong>你居然想看视频，不想关注我</strong></font></div>
-<br/>
-
-<br/>
-<br/>
-<div align="center"><video width="906" height="506" controls>
-    <source src="xxx.mp4" type="video/mp4">
-</video></div>
+    <body>
+        <div class="card" style="max-width: 950px;">
+            <h1 class="title">一颗好石头</h1>
+            <p style="text-align: center; margin-bottom: 20px;">《I Was King》ONE OK ROCK</p>
+            
+            <div class="media-container">
+                <video width="100%" controls>
+                    <source src="I_Was_King.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放
+                </video>
+            </div>
+            
+            <!-- 返回按钮 -->
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="judge.html" class="button" style="display: inline-block; max-width: 200px; text-decoration: none; padding: 8px 16px; background-color: #007bff; color: white; border-radius: 4px;">返回主页</a>
+            </div>
+        </div>
+        
+        <script>
+        // 视频播放控制
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('video');
+            
+            // 添加视频加载事件
+            video.addEventListener('loadeddata', function() {
+                console.log('视频已加载完成，可以播放');
+            });
+            
+            // 添加视频结束事件
+            video.addEventListener('ended', function() {
+                console.log('视频播放结束');
+                // 可以在这里添加视频结束后的操作
+            });
+        });
+        </script>
+    </body>
 </html>

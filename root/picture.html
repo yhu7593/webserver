@@ -2,14 +2,44 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>awsl</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>图片展示 - TinyWebServer</title>
+        <link rel="stylesheet" href="./css/style.css">
+        <script src="./js/main.js" defer></script>
     </head>
-    <body><br/>
-<br/>
-<div align="center"><font size="5"> <strong>你居然想看图，不想关注我</strong></font></div>
-<br/>
-<!--<div  align="center">a w s l</div>-->
-<br/>
-<br/>
-<div align="center"><img src="./xxx.jpg" title="awsl"/></div>
+    <body>
+        <div class="card">
+            <h1 class="title">我</h1>
+            <p style="text-align: center; margin-bottom: 20px;">我嘞个peter</p>
+            
+            <div class="media-container">
+                <img src="./xxx.jpg" title="精美图片" alt="精美图片" />
+            </div>
+            
+            <!-- 返回按钮 -->
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="judge.html" class="button" style="display: inline-block; max-width: 200px; text-decoration: none; padding: 8px 16px; background-color: #007bff; color: white; border-radius: 4px;">返回主页</a>
+            </div>
+        </div>
+        
+        <script>
+        // 图片加载效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.querySelector('.media-container img');
+            
+            // 添加淡入效果
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 1s';
+            
+            img.onload = function() {
+                img.style.opacity = '1';
+            };
+            
+            // 如果图片已经加载完成
+            if (img.complete) {
+                img.style.opacity = '1';
+            }
+        });
+        </script>
+    </body>
 </html>

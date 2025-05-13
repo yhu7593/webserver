@@ -2,22 +2,55 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Sign in</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>用户登录 - TinyWebServer</title>
+        <link rel="stylesheet" href="./css/style.css">
     </head>
     <body>
-<br/>
-<br/>
-    <div align="center"><font size="5"> <strong>登录</strong></font></div>
-    <br/>
-        <div class="login">
-                <form action="2CGISQL.cgi" method="post">
-                        <div align="center"><input type="text" name="user" placeholder="用户名" required="required"></div><br/>
-                        <div align="center"><input type="password" name="password" placeholder="登录密码" required="required"></div><br/>
-                        <div align="center"><button type="submit">确定</button></div>
+        <div class="card">
+            <h1 class="title">用户登录</h1>
+            <div class="login">
+                <form action="2CGISQL.cgi" method="post" id="loginForm">
+                    <div class="form-group">
+                        <input type="text" name="user" placeholder="请输入用户名" required="required">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="请输入密码" required="required">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">登录</button>
+                    </div>
                 </form>
-		<br/>
-               <div  align="center">提示：用户名或密码错误，请重试</div>
+                <div id="error-message" style="text-align: center; margin-top: 15px; color: #e74c3c; font-weight: bold;">提示：用户名或密码错误，请重试</div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="/register.html" style="color: #4a90e2; text-decoration: none;">没有账号？点击注册</a>
+                </div>
+            </div>
         </div>
+
+        <script>
+        // 登录表单验证
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            const username = document.querySelector('input[name="user"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const messageEl = document.getElementById('error-message');
+            
+            // 简单的前端验证
+            if (username.length < 3) {
+                event.preventDefault();
+                messageEl.textContent = '用户名长度不能少于3个字符';
+                return false;
+            }
+            
+            if (password.length < 6) {
+                event.preventDefault();
+                messageEl.textContent = '密码长度不能少于6个字符';
+                return false;
+            }
+            
+            return true;
+        });
+        </script>
     </body>
 </html>
 

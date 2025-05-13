@@ -393,12 +393,9 @@ http_conn::HTTP_CODE http_conn::do_request()
     const char *p = strrchr(m_url, '/');
 
     //处理cgi
+     //根据标志判断是登录检测还是注册检测
     if (cgi == 1 && (*(p + 1) == '2' || *(p + 1) == '3'))
     {
-
-        //根据标志判断是登录检测还是注册检测
-        char flag = m_url[1];
-
         char *m_url_real = (char *)malloc(sizeof(char) * 200);
         strcpy(m_url_real, "/");
         strcat(m_url_real, m_url + 2);
@@ -509,6 +506,7 @@ http_conn::HTTP_CODE http_conn::do_request()
         return BAD_REQUEST;
 
     int fd = open(m_real_file, O_RDONLY);
+    //将文件映射到内存中
     m_file_address = (char *)mmap(0, m_file_stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     close(fd);
     return FILE_REQUEST;
@@ -534,7 +532,7 @@ bool http_conn::write()
 
     while (1)
     {
-        temp = writev(m_sockfd, m_iv, m_iv_count);
+        temp = writev(m_sockfd, m_iv, m_iv_count);//分散写
 
         if (temp < 0)
         {

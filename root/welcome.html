@@ -2,26 +2,54 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>WebServer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>欢迎 - TinyWebServer</title>
+        <link rel="stylesheet" href="./css/style.css">
+        <script src="./js/main.js" defer></script>
     </head>
     <body>
-    <br/>
-    <br/>
-    <div align="center"><font size="5"> <strong>是时候做出选择了</strong></font></div>
-	<br/>
-		<br/>
-		<form action="5" method="post">
- 			<div align="center"><button type="submit">xxx.jpg</button></div>
-                </form>
-		<br/>
-                <form action="6" method="post">
-                        <div align="center"><button type="submit" >xxx.avi</button></div>
-                </form>
-		<br/>
-		<form action="7" method="post">
- 			<div align="center"><button type="submit">关注我</button></div>
-                </form>
-		
+        <div class="card">
+            <h1 class="title">欢迎使用 TinyWebServer</h1>
+            <p style="text-align: center; margin-bottom: 20px;">请选择您想要查看的内容</p>
+            
+            <div class="options">
+                <!-- 图片选项 -->
+                <div class="option-card">
+                    <form action="5" method="post">
+                        <button type="submit">
+                            <img src="peter.jpg" alt="图片" style="width: 50px; height: 50px; margin-bottom: 10px;">
+                            <div>查看图片</div>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- 视频选项 -->
+                <div class="option-card">
+                    <form action="6" method="post">
+                        <button type="submit">
+                            <img src="zzz.jpg" alt="视频" style="width: 70px; height: 50px; margin-bottom: 10px;">
+                            <div>观看视频</div>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+        
+        <script>
+        // 添加简单的动画效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.option-card');
+            
+            // 为每个卡片添加点击效果
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px)';
+                    }, 200);
+                });
+            });
+        });
+        </script>
     </body>
 </html>

@@ -2,19 +2,67 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Sign up</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>用户注册 - TinyWebServer</title>
+        <link rel="stylesheet" href="./css/style.css">
+        <script src="./js/main.js" defer></script>
     </head>
     <body>
-<br/>
-<br/>
-    <div align="center"><font size="5"> <strong>注册</strong></font></div>
-    <br/>
-        <div class="login">
-                <form action="3CGISQL.cgi" method="post">
-                        <div align="center"><input type="text" name="user" placeholder="用户名" required="required"></div><br/>
-                        <div align="center"><input type="password" name="password" placeholder="用户密码" required="required"></div><br/>
-                        <div align="center"><button type="submit">注册</button></div>
+        <div class="card">
+            <h1 class="title">用户注册</h1>
+            <div class="login">
+                <form action="3CGISQL.cgi" method="post" id="registerForm">
+                    <div class="form-group">
+                        <input type="text" name="user" placeholder="请输入用户名" required="required">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="请输入密码" required="required">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="confirm_password" placeholder="请确认密码" required="required">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">注册</button>
+                    </div>
                 </form>
+                <div id="message" style="text-align: center; margin-top: 15px; color: #e74c3c;"></div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="/log.html" style="color: #4a90e2; text-decoration: none;">已有账号？点击登录</a>
+                </div>
+            </div>
         </div>
+
+        <script>
+        // 注册表单验证
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            const username = document.querySelector('input[name="user"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const confirmPassword = document.querySelector('input[name="confirm_password"]').value;
+            const messageEl = document.getElementById('message');
+            
+            // 用户名验证
+            if (username.length < 3) {
+                event.preventDefault();
+                messageEl.textContent = '用户名长度不能少于3个字符';
+                return false;
+            }
+            
+            // 密码验证
+            if (password.length < 6) {
+                event.preventDefault();
+                messageEl.textContent = '密码长度不能少于6个字符';
+                return false;
+            }
+            
+            // 确认密码验证
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                messageEl.textContent = '两次输入的密码不一致';
+                return false;
+            }
+            
+            return true;
+        });
+        </script>
     </body>
 </html>
