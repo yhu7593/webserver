@@ -174,7 +174,7 @@ public:
         struct timeval now = {0, 0};
         gettimeofday(&now, NULL);
         m_mutex.lock();
-        if (m_size <= 0)
+        while (m_size <= 0)
         {
             t.tv_sec = now.tv_sec + ms_timeout / 1000;
             t.tv_nsec = (ms_timeout % 1000) * 1000;
@@ -183,12 +183,6 @@ public:
                 m_mutex.unlock();
                 return false;
             }
-        }
-
-        if (m_size <= 0)
-        {
-            m_mutex.unlock();
-            return false;
         }
 
         m_front = (m_front + 1) % m_max_size;
