@@ -334,6 +334,14 @@ http_conn::HTTP_CODE http_conn::parse_content(char *text)
         text[m_content_length] = '\0';
         //POST请求中最后为输入的用户名和密码
         m_string = text;
+        // 找到第二个&并替换为'\0'
+        char* first_amp = strchr(m_string, '&');
+        if (first_amp != NULL) {
+            char* second_amp = strchr(first_amp + 1, '&');
+            if (second_amp != NULL) {
+                *second_amp = '\0';
+            }
+        }
         return GET_REQUEST;
     }
     return NO_REQUEST;
@@ -403,7 +411,7 @@ http_conn::HTTP_CODE http_conn::do_request()
         free(m_url_real);
 
         //将用户名和密码提取出来
-        //user=123&passwd=123
+        //user=123&password=123
         char name[100], password[100];
         int i;
         for (i = 5; m_string[i] != '&'; ++i)

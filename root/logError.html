@@ -42,9 +42,9 @@
                 return false;
             }
             
-            if (password.length < 6) {
+            if (password.length < 4) {
                 event.preventDefault();
-                messageEl.textContent = '密码长度不能少于6个字符';
+                messageEl.textContent = '密码长度不能少于4个字符';
                 return false;
             }
             
