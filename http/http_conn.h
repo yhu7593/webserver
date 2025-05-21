@@ -109,7 +109,6 @@ private:
 
 public:
     static int m_epollfd;//所有socket上的epoll事件都注册在同一个epollfd上
-    static int m_user_count;//统计用户数量
     MYSQL *mysql;
     int m_state;  //读为0, 写为1
 

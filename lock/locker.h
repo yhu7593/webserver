@@ -112,4 +112,21 @@ private:
     //static pthread_mutex_t m_mutex;
     pthread_cond_t m_cond;
 };
+
+class MutexLockGuard
+{
+public:
+    explicit MutexLockGuard(locker & lock): m_lock(lock)
+    {
+        m_lock.lock();
+    }
+    ~MutexLockGuard()
+    {
+        m_lock.unlock();
+    }
+    MutexLockGuard(const MutexLockGuard &) = delete;
+    MutexLockGuard & operator=(const MutexLockGuard &) = delete;   
+private:
+    locker& m_lock;
+};
 #endif

@@ -54,6 +54,7 @@ public:
     int m_pipefd[2];
     int m_epollfd;
     http_conn *users;
+    static int m_user_count;//统计用户数量
 
     //数据库相关
     connection_pool *m_connPool;

@@ -1,5 +1,5 @@
 #include "http_conn.h"
-
+#include "../webserver.h"
 #include <mysql/mysql.h>
 #include <fstream>
 
@@ -94,7 +94,6 @@ void modfd(int epollfd, int fd, int ev, int TRIGMode)
     epoll_ctl(epollfd, EPOLL_CTL_MOD, fd, &event);
 }
 
-int http_conn::m_user_count = 0;
 int http_conn::m_epollfd = -1;
 
 //关闭连接，关闭一个连接，客户总量减一
@@ -105,7 +104,7 @@ void http_conn::close_conn(bool real_close)
         printf("close %d\n", m_sockfd);
         removefd(m_epollfd, m_sockfd);
         m_sockfd = -1;
-        m_user_count--;
+        WebServer::m_user_count--;
     }
 }
 
@@ -117,7 +116,7 @@ void http_conn::init(int sockfd, const sockaddr_in &addr, char *root, int TRIGMo
     m_address = addr;
 
     addfd(m_epollfd, sockfd, true, m_TRIGMode);
-    m_user_count++;
+    WebServer::m_user_count++;
 
     //当浏览器出现连接重置时，可能是网站根目录出错或http响应格式出错或者访问的文件中内容完全为空
     doc_root = root;
@@ -332,7 +331,7 @@ http_conn::HTTP_CODE http_conn::parse_content(char *text)
     if (m_read_idx >= (m_content_length + m_checked_idx))
     {
         text[m_content_length] = '\0';
-        //POST请求中最后为输入的用户名和密码
+        //POST请求中最后为输入的用户名和密码以及确认密码
         m_string = text;
         // 找到第二个&并替换为'\0'
         char* first_amp = strchr(m_string, '&');

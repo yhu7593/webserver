@@ -28,6 +28,8 @@ WebServer::~WebServer()
     delete m_pool;
 }
 
+int WebServer::m_user_count = 0;
+
 void WebServer::init(int port, string user, string passWord, string databaseName, int log_write,
                      int opt_linger, int trigmode, int sql_num, int thread_num, int close_log, int actor_model)
 {
@@ -212,7 +214,7 @@ bool WebServer::dealclientdata()
             LOG_ERROR("%s:errno is:%d", "accept error", errno);
             return false;
         }
-        if (http_conn::m_user_count >= MAX_FD)
+        if (m_user_count >= MAX_FD)
         {
             utils.show_error(connfd, "Internal server busy");
             LOG_ERROR("%s", "Internal server busy");
@@ -231,7 +233,7 @@ bool WebServer::dealclientdata()
                 LOG_ERROR("%s:errno is:%d", "accept error", errno);
                 break;
             }
-            if (http_conn::m_user_count >= MAX_FD)
+            if (m_user_count >= MAX_FD)
             {
                 utils.show_error(connfd, "Internal server busy");
                 LOG_ERROR("%s", "Internal server busy");
