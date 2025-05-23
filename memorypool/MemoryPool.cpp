@@ -43,7 +43,7 @@ namespace MemoryPool
         Slot *temp;
         {
             std::lock_guard<std::mutex> lock(mutex_for_Block);
-            if (cur_Slot > last_Slot)
+            if (cur_Slot >= last_Slot)
             {
                 // 当前内存块已无内存槽可用，开辟一块新的内存
                 allocate_New_Block();
@@ -74,7 +74,7 @@ namespace MemoryPool
         size_t paddingSize = padPointer(body, Slot_Size);               // 计算块头部Slot*指针需要的填充字节数
         cur_Slot = reinterpret_cast<Slot *>(body + paddingSize);        // 更新当前空闲槽位指针
 
-        last_Slot = reinterpret_cast<Slot *>(body + Block_Size - Slot_Size); // 更新当前块的最后一个槽位指针
+        last_Slot = reinterpret_cast<Slot *>(reinterpret_cast<size_t>(newBlock) + Block_Size - Slot_Size + 1); // 更新当前块的最后一个槽位指针
         free_Slot = nullptr;                                                 // 重置空闲槽位指针,调用此函数时，free_Slot指向的槽位已经被分配
     }
 
