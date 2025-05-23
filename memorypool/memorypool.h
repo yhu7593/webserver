@@ -9,9 +9,9 @@
 #include "../lock/locker.h"
 #include <functional>
 
-#define BlockSize 16384 // 内存块大小
-#define MAX_BYTES 4096  // 最大可分配字节数
-#define POOL_SIZE  64   // 内存池大小  
+#define BlockSize 4096 // 内存块大小
+#define MAX_BYTES 512  // 最大可分配字节数
+#define POOL_SIZE 64    // 内存池大小
 struct Slot
 {
     Slot *next;
@@ -60,7 +60,7 @@ private:
     }
 
     // 处理无空闲槽位的情况
-    Slot *MemoryPool::nofree_solve()
+    Slot *nofree_solve()
     {
         if (currentSlot >= lastSlot)
             return allocateBlock();
@@ -94,7 +94,7 @@ public:
     }
 
     // 分配内存槽位
-    Slot *MemoryPool::allocate()
+    Slot *allocate()
     {
         if (freeSlot)
         {
@@ -112,7 +112,7 @@ public:
     }
 
     // 释放内存槽位，将其加入空闲链表
-    inline void MemoryPool::deallocate(Slot *p)
+    inline void deallocate(Slot *p)
     {
         if (p)
         {
@@ -125,7 +125,6 @@ public:
     }
 };
 
-template <typename T, typename... Args>
 class MemoryPoolManager
 {
 public:
@@ -138,26 +137,14 @@ public:
         for (int i = 0; i < POOL_SIZE; ++i)
             get_memorypool(i).~MemoryPool();
     }
-    // 分配内存
-    T *newElement(Args &&...args)
-    {
-        T *p;
-        if (p = reinterpret_cast<T *>(use_memory(sizeof(T))))
-            new (p) T(std::forward<Args>(args)...);
-        return p;
-    }
-
-    // 释放内存
-    void deleteElement(T *p)
-    {
-        if (p)
-            p->~T();
-        free_memory(sizeof(T), reinterpret_cast<void *>(p));
-    }
+    template <typename T, typename... Args>
+    friend T *newElement(Args &&...args);
+    template <typename T>
+    friend void deleteElement(T *p);
 
 private:
     // 根据大小分配内存
-    void *use_memory(size_t size)
+    static void *use_memory(size_t size)
     {
         if (!size)
             return nullptr;
@@ -168,7 +155,7 @@ private:
     }
 
     // 根据大小释放指定内存
-    void free_memory(size_t size, void *p)
+    static void free_memory(size_t size, void *p)
     {
         if (!p)
             return;
@@ -181,15 +168,33 @@ private:
     }
 
     // 分配内存池
-    void init_memorypool()
+    static void init_memorypool()
     {
         for (int i = 0; i < POOL_SIZE; ++i)
             get_memorypool(i).init((i + 1) << 6); // 分配不同槽位的内存64B到4096B
     }
     // 0-63槽位的内存池
-    MemoryPool &get_memorypool(int id)
+    static MemoryPool &get_memorypool(int id)
     {
         static MemoryPool memorypool[POOL_SIZE];
         return memorypool[id];
     }
 };
+
+// 分配内存
+template <typename T, typename... Args>
+T *newElement(Args &&...args)
+{
+    T *p;
+    if (p = reinterpret_cast<T *>(MemoryPoolManager::use_memory(sizeof(T))))
+        new (p) T(std::forward<Args>(args)...);
+    return p;
+}
+// 释放内存
+template <typename T>
+void deleteElement(T *p)
+{
+    if (p)
+        p->~T();
+    MemoryPoolManager::free_memory(sizeof(T), reinterpret_cast<void *>(p));
+}
