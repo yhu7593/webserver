@@ -14,7 +14,7 @@
 
 #include "./threadpool/threadpool.h"
 #include "./http/http_conn.h"
-#include "./memorypool/memorypool.h"
+
 const int MAX_FD = 65536;           // 最大文件描述符
 const int MAX_EVENT_NUMBER = 10000; // 最大事件数
 const int TIMESLOT = 5;             // 最小超时单位
@@ -67,8 +67,6 @@ public:
     threadpool<http_conn> *m_pool;
     int m_thread_num;
     
-    //内存池
-    static MemoryPoolManager<http_conn> m_memorypool;
 
     // epoll_event相关
     epoll_event events[MAX_EVENT_NUMBER];

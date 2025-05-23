@@ -2,9 +2,9 @@
 #include <thread>
 #include <vector>
 
-#include "./memorypool.h"
+#include "./MemoryPool.h"
 
-
+using namespace MemoryPool;
 
 // 测试用例
 class P1 
@@ -98,12 +98,10 @@ void BenchmarkNew(size_t ntimes, size_t nworks, size_t rounds)
 
 int main()
 {
-   
-    MemoryPoolManager memorypool; // 内存池管理器
-	BenchmarkMemoryPool(100, 1, 10); // 测试内存池
+    HashBucket::initMemoryPool(); // 初始化内存池
+	BenchmarkMemoryPool(100, 10, 10); // 测试内存池
 	std::cout << "===========================================================================" << std::endl;
-	std::cout << "===========================================================================" << std::endl;
-	BenchmarkNew(100, 1, 10); // 测试 new delete
+	BenchmarkNew(100, 10, 10); // 测试 new delete
 	
 	return 0;
 }
