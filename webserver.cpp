@@ -96,8 +96,6 @@ void WebServer::sql_pool()
     users->initmysql_result(m_connPool);
 }
 
-MemoryPoolManager<http_conn> WebServer::m_memorypool;
-
 void WebServer::thread_pool()
 {
     // 线程池
